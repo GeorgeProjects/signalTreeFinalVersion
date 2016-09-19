@@ -1,0 +1,100 @@
+.radial-node {
+  cursor: pointer;
+}
+.nodecircle2{
+  stroke: #FF7F0E;
+}
+.radial-node text {
+  font: 10px sans-serif;
+}
+.node[class~=highlight] > circle{
+  fill: #b2df8a;
+  stroke: #b2df8a;
+}
+.radial-route-node-inner{
+  fill: #4A4AFF;
+}
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1px;
+}
+.radial-route-link{
+  stroke-width:1px;
+  stroke: #4A4AFF;
+  fill:none;
+}
+.axis line,
+.axis path {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+.line{
+  fill:none;
+  stroke:steelblue;
+  stroke-width:1px;
+}
+.axis text {
+	font-size: 10px;
+	//text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+	cursor: move;
+}
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+//g[class~=opacity-non-similar] > circle
+//  opacity: 0.5;
+//}
+.opacity-non-similar{
+  opacity: 0.5;
+}
+.node-remove{
+  stroke: #c0c0c0 !important;
+  stroke-width: 2px !important;
+}
+.path-remove{
+  fill: #c0c0c0 !important;
+  stroke: #c0c0c0 !important;
+}
+#leftTopWrapper .label{
+  float: left;
+  padding: .3em .5em .3em;
+}
+/* D3.tips */
+.d3-radial-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+/* .d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 4px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+} */
+
+/* Style northward tooltips differently */
+.d3-radial-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+/*#leftTopLeftWrapper-radial .orange-label{
+  background-color: #FF7F0E;
+}
+#leftTopLeftWrapper-sunburst .orange-label{
+  background-color: #1F77B4;
+}*/

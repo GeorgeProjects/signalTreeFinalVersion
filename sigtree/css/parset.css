@@ -1,0 +1,12 @@
+.parset path[class~=highlight] {
+    stroke: #b2df8a;
+    fill: red;
+}
+.not-on-hover-route-path{
+	fill: steelblue;
+	fill-opacity: 0.3;
+}
+.on-hover-route-path{
+	fill: #4A4AFF !important;
+	fill-opacity: 0.9 !important;
+}

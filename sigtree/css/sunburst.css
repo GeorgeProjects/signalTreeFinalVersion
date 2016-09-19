@@ -1,0 +1,14 @@
+.sunburst_arc {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.mouseover_hide-sunburst_arc {
+    opacity: 0.3;
+}
+
+.zoomout_circle {
+    fill: none;
+    pointer-events: all;
+    cursor: pointer;
+}

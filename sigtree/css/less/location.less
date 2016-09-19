@@ -1,0 +1,238 @@
+body{
+  //hidden-content类是在加载新数据的时将
+  //
+  overflow-y: hidden;
+  .hidden-content{
+    visibility: hidden;
+    opacity: 1;
+  }
+  //select tree.css #label-C { border-top属性
+  //button group中的属性
+  #mainTimeline .selection {
+    stroke: black !important;
+    stroke-width: 1.5px !important;
+    opacity: 1 !important;
+  }
+  .structure{
+    border-color: #a0a0a0;
+  }
+    #toolbar{
+      z-index: 3;
+      position: absolute;
+      top: 0%;
+      height: 35px;
+      left: 0%;
+      right: 0%;
+    }
+    #topWrapper {
+      position: absolute;
+      top: 35px;
+      /*top: 50px;*/
+      left: 0%;
+      right: 0%;
+      bottom: 75%;
+      border: 2px solid #a0a0a0;
+      //border: 2px solid ;
+      #innerTopLeft{
+        position: absolute;
+        width: 85%;
+        height: 100%;
+        top: 0%;
+        left: 0%;
+      }
+      #innerTopRight {
+        position: absolute;
+        padding: 5px 0px 5px 0px;
+        text-align: center;
+        left: 85%;
+        top: 0%;
+        width: 15%;
+        height: 100%;
+        border-left:1px solid #a0a0a0;
+        //border-left:1px solid #a0a0a0;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        font-size: 9px;
+        #innerTopRightLeft{
+          position: absolute;
+          padding: 5px 5px 5px 5px;
+          top: 0%;
+          width: 30%;
+          height: 100%;
+          left: 0%;
+          .label-table{
+            border-right: 1px solid #a0a0a0;
+          }
+        }
+        #innerTopRightMiddle{
+          position: absolute;
+          padding: 5px 5px 5px 5px;
+          top: 0%;
+          width: 35%;
+          height: 100%;
+          left: 30%;
+          .label-table{
+            border-right: 1px solid #a0a0a0;
+          }
+        }
+        #innerTopRightRight{
+          position: absolute;
+          padding: 5px 5px 5px 5px;
+          top: 0%;
+          width: 35%;
+          height: 100%;
+          left: 65%;
+        }
+      }
+    }
+    #rightWrapper {
+     // border-bottom: 2px solid #a0a0a0;
+     // border-left: 2px solid #a0a0a0;
+     // border-right:  2px solid #a0a0a0;
+      border-width: 0px 2px 2px 2px;
+      border-style: solid;
+      position: absolute;
+      top: 25%;
+      left: 50%;
+      right: 0%;
+      bottom: 0%;
+      #rightToolbarWrapper{
+        //border-bottom: 1px solid #a0a0a0;
+        border-bottom: 1px solid #a0a0a0;
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        right: 0%;
+        height: 35px;
+      }
+      #rightComparisonWrapper{
+        position: absolute;
+        top: 35px;
+        left: 0%;
+        right: 0%;
+        bottom: 0%;
+        overflow-y: auto;
+       // background-color: red;
+        #multitree{
+          width: 100%;
+         // background-color: yellow;
+          .comparison-signaltree-div{
+          }
+          #icon-container{
+            float: left;
+            top: 0px;
+            left: 0px;
+            height: 100%;
+            .div-instrument-container{
+              visibility: hidden;
+              overflow-y: auto;
+            }
+          }
+        }
+
+      }
+    }
+    #leftWrapper{
+      top: 25%;
+      left: 0%;
+      right: 50%;
+      bottom: 0%;
+      border-bottom: 2px solid #a0a0a0;
+      border-left: 2px solid #a0a0a0;
+      position: absolute;
+      #leftToolbarWrapper{
+        border-bottom: 1px solid #a0a0a0;
+        //border-color: #a0a0a0;
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        right: 0%;
+        height: 35px;
+      }
+      #leftTreeWrapper{
+        position: absolute;
+        top: 35px;
+        left: 0%;
+        right: 0%;
+        bottom: 0%;
+        #leftTopWrapper {
+          position: absolute;;
+          border-bottom: 1px solid #a0a0a0;
+          top: 0%;
+          bottom: 50%;
+          height: 50%;
+          left: 0%;
+          right: 0%;
+            #leftTopLeftWrapper-radial{
+              position: absolute;
+              top: 0%;
+              bottom: 0%;
+              right: 50%;
+              left: 0%;
+            } 
+            #leftTopLeftWrapper-sunburst{
+              visibility: hidden;
+              position: absolute;
+              top: 0%;
+              bottom: 0%;
+              right: 50%;
+              left: 0%;
+            } 
+            #leftTopRightWrapper{
+              position: absolute;
+              //border-right: 1px solid #a0a0a0;
+              top: 0%;
+              bottom: 0%;
+              right: 0%;
+              left: 50%;
+              #histogram-label{
+                position: absolute;
+                top: 0%;
+                right: 0%;
+                left: 0%;
+                bottom: 90%;
+                #histogram-label-text{
+                  position: absolute;
+                  font-size: 15px;
+                  top: 50%;
+                  left: 50%;
+                  transform: translateX(-50%) translateY(-50%);
+                }
+              }
+              #leftTopRightBottomWrapper{
+                position: absolute;
+                top: 15px;
+                right: 0%;
+                left: 0%;
+                bottom: 0%;
+              }
+            }
+         }
+         #leftBottomWrapper {
+          position: absolute;;
+          top: 50%;
+          bottom: 0%;
+          left: 0%;
+          right: 0%;
+          padding-left: 10px;
+          padding-top: 5px;
+        }
+      }
+      #projectionWrapper{
+        visibility: hidden;
+        top: 35px;
+        left: 0%;
+        right: 0%;
+        bottom: 0%;
+        position: absolute;
+      }
+      #projectionLinkWrapper{
+        visibility: hidden;
+        top: 35px;
+        left: 0%;
+        right: 0%;
+        bottom: 0%;
+        position: absolute;
+      }
+    }
+}

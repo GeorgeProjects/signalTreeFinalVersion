@@ -1,0 +1,91 @@
+.comparison-signaltree-div .blue-label{
+	background-color: @selection-highlight-positive;
+}
+.comparison-signaltree-div .orange-label{
+	background-color: @selection-highlight-negative;
+}
+
+div.div-icon-container, div.div-instrument-container{
+	margin-top: 3px;
+}
+div.div-instrument-container{
+	visibility: hidden;
+	float: right;
+}
+.compare-nodes{
+	cursor: pointer;
+	fill: #C0C0C0;
+  stroke-width: 2px;
+}
+.blue-bar{
+	fill: @selection-highlight-positive;
+}
+.orange-bar{
+	fill: @selection-highlight-negative;
+}
+.compare-route-node-inner{
+  fill: #4A4AFF !important;
+}
+.compare-links{
+	stroke-width:1px;
+	stroke: #888888;
+	fill:none;
+	opacity:0.8;
+}
+.compare-route-link{
+  stroke-width:1px;
+  stroke: #4A4AFF;
+  fill:none;
+}
+.compare-route-bar-inner{
+  fill: #4A4AFF !important;
+}
+.shrink-blue-node{
+  fill: @selection-highlight-positive !important;
+}
+.shrink-orange-node{
+  fill: @selection-highlight-negative !important;
+}
+.stretch-node{
+  fill: white;
+}
+.comparison-signaltree-div{
+  border-bottom: 0.5px solid gray;
+}
+.white-border{
+  border-top: 0.5px solid #C0C0C0;
+  border-left: 0.5px solid #C0C0C0;
+  border-right: 0.5px solid #C0C0C0;
+  border-bottom: 0.5px solid #C0C0C0;
+}
+.black-border{
+  border-top: 0.5px solid black;
+  border-left: 0.5px solid black;
+  border-right: 0.5px solid black;
+  border-bottom: 0.5px solid black;
+}
+.mouseover-border-highlight{
+  border: 0.5px outset #ff5858;
+}
+.compare-current-operation-circle{
+	r: 3.5px !important;
+	fill: black !important;
+}
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+.mouse-move{
+  background-color: #eee;
+}
+.compare-blue-triangle{
+   stroke: @selection-highlight-positive;
+   stroke-width: 2px;
+   fill: @selection-highlight-positive;
+}
+.compare-orange-triangle{
+   stroke: @selection-highlight-negative;
+   stroke-width: 2px;
+   fill: @selection-highlight-negative;
+}

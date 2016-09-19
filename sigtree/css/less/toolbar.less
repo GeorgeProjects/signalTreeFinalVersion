@@ -1,0 +1,46 @@
+#toolbar, #rightToolbarWrapper, #leftToolbarWrapper{
+	div.button-group{
+		margin-left: @button-group-margin-left;
+		display: inline-block;
+		//color: #bbbbbb;
+		//color: white;
+		span.button{
+			font-size: 15px;
+			margin-left: @button-margin-left;
+			display: inline-block;
+			text-align: center;
+			//border-bottom: 3px solid #aaaaaa;
+			border-bottom: 3px solid white;//
+			padding-left: @button-padding-left;
+			padding-right: @button-padding-left;
+			margin-top: @button-margin-top;
+		}
+	}
+	div.button-group.bind{
+		margin-left: @button-group-margin-left;
+		display: inline-block;
+		//color: black;
+		//color: white;
+		span.button{
+			font-size: 15px;
+			margin-left: @button-margin-left;
+			display: inline-block;
+			text-align: center;
+			border-bottom: 3px solid #aaaaaa;
+			//border-bottom: 3px solid white;//#aaaaaa
+			padding-left: @button-padding-left;
+			padding-right: @button-padding-left;
+			margin-top: @button-margin-top;
+		}
+		span.button:hover{
+			background-color: #2060d5;
+			color: white;
+		}
+		span.button.active{
+			border-bottom: 3px solid #2060d5;
+		}
+	}
+	#title{
+		margin-left: 5px;
+	}
+}

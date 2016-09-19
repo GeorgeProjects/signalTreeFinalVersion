@@ -1,0 +1,65 @@
+.time{
+  font-size: 12px;
+}
+.size{
+  font-size: 12px;
+}
+.tick_label{
+  font-size: 12px;
+}
+.mainTimeline .bar {
+  fill: #C0C0C0;
+}
+.label-wrapper > .label  {
+  pointer-events: none;
+  cursor: not-allowed;  
+  color: white;
+}
+#tree-select-controller {
+  text-align: right;
+}
+#innerTopRightTop{
+  overflow-y: auto;
+}
+#innerTopRightBottom{
+  overflow-y: auto;
+}
+.hover{
+  stroke: black;
+  stroke-width: 2px;
+  fill: none;
+}
+.click, .unclick, .default{
+  stroke: gray;
+  stroke-width: 1px;
+  fill: none;
+}
+ #mainTimeline .selection {
+    stroke: black !important;
+    stroke-width: 1.5px !important;
+    opacity: 1 !important;
+}
+.selection-label{
+  font-size: 2px;
+  fill: black;
+}
+#innerTopRightTop #label-C tr{
+  width: 100%;
+}
+#innerTopRightTop #label-C tr td{
+  width: 50%;
+  text-align: center;
+  font-size: 8px;
+  valign: middle;
+}
+#innerTopRightBottom #label-C tr{
+  width: 100%;
+}
+#innerTopRightBottom #label-C tr td{
+  width: 50%;
+  text-align: center;
+  valign: middle;
+}
+.arc-num-label{
+  fill: red;
+}

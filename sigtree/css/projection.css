@@ -1,0 +1,53 @@
+.projection-nodes{
+	r: 4px;
+	fill: gray;
+  opacity: 1;
+}
+.projection-link-nodes{
+  r: 4px;
+  fill: gray;
+  opacity: 1;
+}
+.projection-node-path {
+  fill: none;
+  stroke: gray;
+  stroke-width: 2px;
+}
+.projection-node-point {
+  fill: steelblue;
+  stroke: #fff;
+  stroke-width: 3px;
+}
+circle[class~=opacity-click-unhighlight] {
+  opacity: 1;
+  fill: gray;
+  stroke: black;
+}
+circle[class~=opacity-selection-highlight]{
+  opacity: 1 !important;
+}
+circle[class~=opacity-selection-unhighlight]{
+  opacity: 0.2 !important;
+  stroke: gray !important; 
+}
+circle[class~=opacity-click-highlight] {
+  /*fill: #ff5858 !important;*/
+  opacity: 1 !important;
+  fill: black !important;
+  stroke: black !important;
+  r: 6px;
+  //fill: gray;
+  //opacity: 1 !important;
+}
+circle[class~=opacity-unhighlight]{
+  opacity: 0.2;
+  stroke: gray;
+}
+circle[class~=opacity-highlight]{
+  fill: black;
+  opacity: 1 !important;
+}
+circle[class~=opacity-similarity-highlight]{
+  fill: black !important;
+  opacity: 1 !important;
+}

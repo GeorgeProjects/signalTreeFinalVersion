@@ -1,0 +1,378 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+        <title>Signal tree visualization</title>
+        <link rel="stylesheet/less" href="css/less/all.less">
+        <link rel="stylesheet" type="text/css" href="libs/font-awesome-4.6.3/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="css/normalize.css">
+        <link rel="stylesheet" type="text/css" href="libs/jquery-ui/jquery-ui.css">
+    </head>
+
+    <body>
+        <!--直接将css写到html里面会大大减少html布局的加载时间-->
+        <div class="loading" id = 'loading' style='position: absolute; width: 100%; height:100%;' >
+          <div class="back" style="position: absolute; width: 100%; height: 100%; background-color: #ffffff; opacity: 1;"></div>
+          <div class="logo" 
+          style='position: absolute; margin: 50px auto; font-size: 30px; text-align: center; left:45%; top: 40%;'>
+              <i class="fa fa-spinner fa-spin fa-lg"></i>
+              <span> 加载中 ...</span>
+          </div>
+        </div>
+        <div id = 'toolbar' class='remove-highlight toolbar' style='visibility: hidden'>
+            <div id = "system-title-div" class = "button-group bind">
+                <span id = "title" class = "button toolbar-all" data-placement="bottom" title = "关于本工具">信号树可视化系统</span>
+            </div>
+            <div id = "arc-link-div" class = "button-group bind">
+                <span id = "arc-link" class = "button toolbar-all active" data-placement="bottom" title = "全部显示连接">
+                    <i class="icon iconfont">&#xe627;</i>
+                </span>
+                <span id = "arc-link-hover" class = 'button toolbar-all' data-placement="bottom" data-placement="bottom" title = "鼠标悬停显示连接">
+                    <i class="icon iconfont">&#xe61e;</i>
+                    <span class="small-arrow-down">
+                    </span>
+                </span>
+                <div id = 'hover-arc-div'>
+                    <div id="slider-container">
+                        <div id="slider"></div>
+                    </div>
+                    <div id="slider-text">
+                        0
+                    </div>
+                </div>
+            </div>
+            <div id = "sort-div" class = "button-group bind">
+                <span id = "time-sort" class = "button sort-btn toolbar-all active" data-placement="bottom" title = "按时间排序" sort-type="time">
+                    <span class="glyphicon glyphicon-time"></span>
+                </span>
+                <span id = "size-sort" class = "button sort-btn toolbar-all" data-placement="bottom" title = "按流量排序" sort-type="size"> 
+                    <span class="glyphicon glyphicon-signal"></span>
+                </span>
+            </div>
+            <div id = "switch-selection-div" class = "button-group bind">
+                <span id = "switch-selection" class = "button data-btn toolbar-all" data-placement="bottom" title = "变换当前选择" data-type="switch">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                </span>
+            </div>
+            <div id = 'click-shrink' class = 'button-group bind'>
+                <span id = "click-node-shrink" class = "button click-shrink toolbar-all active" data-placement="bottom" title = "收缩当前结点">
+                    <i class="icon iconfont">&#xe623;</i>
+                </span>
+                <span id = "click-other-node-shrink" class = "button click-shrink toolbar-all" data-placement="bottom" title = "收缩兄弟结点">
+                    <i class="icon iconfont">&#xe624;</i>
+                </span>
+            </div>
+            <div id = "clear-all-div" class = "button-group bind">
+                <span id = "clear-all" class = "button data-btn toolbar-all" data-placement="bottom" title = "清空选择" data-type="switch">
+                    <i class="icon iconfont">&#xe60d;</i>
+                </span>
+            </div>
+            <div id = "tool-tip-div" class = "button-group bind">
+                <span id = "enable-tool-tip" class = "button data-btn toolbar-all active" data-placement="bottom" title = "显示提示信息">
+                    <i class="icon iconfont">&#xeb1e;</i>
+                </span>
+            </div>
+            <div id = 'load-files' class = 'button-group bind'>
+                <span id = "load-file-name" class = "button click-chinese toolbar-all active" data-placement="bottom" title = "中文">
+                <span id = "set-select-name">
+                    sample1  
+                </span>        
+                <span class="arrow-down">
+                </span>
+                </span>
+                <div id="load-file-div" class="load-file">
+                    <table id = "load-file-table" class="load-file">
+                    </table>
+                </div>
+            </div>
+            <div id = 'system-version-div'>
+                <div id = 'click-change-background' class = 'button-group bind'>
+                    <span id = "change-color-white" class = "button click-white toolbar-all active" data-placement="bottom" title = "白色背景">
+                        <i class="icon iconfont">&#xe613;</i>
+                    </span>
+                    <span id = "change-color-black" class = "button click-black toolbar-all" data-placement="bottom" title = "黑色背景">
+                        <i class="icon iconfont">&#xe600;</i>
+                    </span>
+                </div>
+                <div id = 'click-change-language' class = 'button-group bind'>
+                    <span id = "change-language-chinese" class = "button click-chinese toolbar-all active" data-placement="bottom" title = "中文">
+                        中
+                    </span>
+                    <span id = "change-language-english" class = "button click-english toolbar-all" data-placement="bottom" title = "英文">
+                        En
+                    </span>
+                </div>
+                <div id = 'help-div' class = 'button-group bind'>
+                    <span id = "help" class = "button click-help toolbar-all" data-placement="bottom" title = "帮助">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div id = "topWrapper" class = "structure hidden-content">
+            <div id = "innerTopLeft">
+                <svg class = "mainTimeline"></svg>
+            </div>
+            <div id="innerTopRight" class='remove-highlight structure toolbar' style='visibility: hidden'>
+                  <div id="innerTopRightLeft">
+                    <div id="label-name" class="label-wrapper">
+                        <span id = "node-type" class="btn btn-default btn-xs label blue-label"></span>
+                        <table class = 'label-table' style="width:100%">
+                          <tr>
+                            <td class = 'date-description'>Date</td>
+                          </tr>
+                          <tr>
+                            <td class = 'value-description'>Value</td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-description'>Level</td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-0-description'>L-0</td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-1-description'>L-1</td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-2-description'>L-2</td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-3-description'>L-3</td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-4-description'>L-4</td>
+                          </tr>
+                          <tr>
+                            <td class = 'node-num-description'>sum</td>
+                          </tr>
+                        </table>
+                     </div>
+                </div>
+                <div id="innerTopRightMiddle">
+                     <div id="label-A" class="label-wrapper">
+                          <span id = "node-type" class="btn btn-default btn-xs label blue-label">
+                              1
+                          </span>
+                        <table class = 'label-table' style="width:100%">
+                          <tr>
+                            <td class = 'date-description'></td>
+                          </tr>
+                          <tr>
+                            <td class = 'value-description'></td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-description'></td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-0-description'></td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-1-description'></td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-2-description'></td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-3-description'></td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-4-description'></td>
+                          </tr>
+                          <tr>
+                            <td class = 'node-num-description'></td>
+                          </tr>
+                        </table>
+                     </div>
+                </div>
+                <div id='innerTopRightRight'>
+                    <div id="label-C" class="label-wrapper" style="text-align: center; width:100%">
+                          <span id = "node-type" class="btn btn-default btn-xs label blue-label">
+                              -
+                          </span>
+                         <table class = 'label-table' style="width:100%">
+                          <tr>
+                            <td class = 'date-description'>date</td>
+                          </tr>
+                          <tr>
+                            <td class = 'value-description'>value</td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-description'>level</td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-0-description'>level0</td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-1-description'>level1</td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-2-description'>level2</td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-3-description'>level3</td>
+                          </tr>
+                          <tr>
+                            <td class = 'level-4-description'>level4</td>
+                          </tr>
+                          <tr>
+                            <td class = 'node-num-description'>Number</td>
+                          </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id = "rightWrapper" class='remove-highlight structure hidden-content'>
+            <div id = "rightToolbarWrapper" class = 'structure toolbar toolbar-unhighlight' style='visibility: hidden'>
+                <div id = "comparison-title-div" class = "button-group bind">
+                    <span id = "title" class = "button toolbar-tree" title = "多树比较视图">多树比较视图</span>
+                </div>
+                <div id = 'node-comparison' class = 'button-group bind'>
+                    <span id = "all-node-comparison" class = "button active node-comparison toolbar-tree" title = "比较所有节点">
+                        <i class="icon iconfont">&#xe625;</i>
+                    </span>
+                    <span id = "same-node-comparison" class = "button node-comparison toolbar-tree" title = "比较相同节点">
+                        <i class="icon iconfont">&#xe626;</i>
+                    </span>
+                </div>
+                <div id = 'node-comparison' class = 'button-group bind'>
+                    <span id = "all-depth-comparison" class = "button active node-comparison toolbar-tree" title = "完整显示信号树">
+                        <i class="icon iconfont">&#xe622;</i>
+                    </span>
+                    <span id = "two-depth-comparison" class = "button node-comparison toolbar-tree" title = "仅显示末两层">
+                        <i class="icon iconfont">&#xe621;</i>
+                    </span>
+                    <span id = "only-flow-comparison" class = "button node-comparison toolbar-tree" title = "仅显示流量">
+                        <i class="icon iconfont">&#xe620;</i>
+                    </span>
+                     <!--<span id = "shortest-flow-comparison" class = "button node-comparison toolbar-tree" title = "尽可能多显示树的流量">
+                        <i class="icon iconfont">&#xe61f;</i>
+                    </span>-->
+                </div>
+                <div id = 'level-selection' class = 'button-group bind'>
+                    <span id = "level-0" class = "button level-selection toolbar-tree active" title = "第0层">L0</span>
+                    <span id = "level-1" class = "button level-selection toolbar-tree active" title = "第1层">L1</span>
+                    <span id = "level-2" class = "button level-selection toolbar-tree active" title = "第2层">L2</span>
+                    <span id = "level-3" class = "button level-selection toolbar-tree active" title = "第3层">L3</span>
+                    <span id = "level-4" class = "button level-selection toolbar-tree active" title = "第4层">L4</span>
+                </div>
+                 <div id = 'help-div' class = 'button-group bind'>
+                    <span id = "resize-brush" class = "button click-resize toolbar-all" data-placement="bottom" title = "更新刷选">
+                        <span class="glyphicon glyphicon-resize-horizontal"></span>
+                    </span>
+                </div>
+            </div>
+            <div id = "rightComparisonWrapper" class = 'structure'>
+                <ul id="multitree" class = 'structure'>
+                </ul>
+            </div>
+        </div>
+        <div id = "leftWrapper" class='structure hidden-content'>
+            <div id = "leftToolbarWrapper" class = 'structure remove-highlight toolbar toolbar-unhighlight' style='visibility: hidden'>
+                <div id = "singletree-title-div" class = "button-group bind">
+                    <span id = "title" class = "button toolbar-compare" title = "单信号树可视化视图">单树视图</span>
+                </div>
+                <div id = 'switch-vis-div' class = 'button-group bind'>
+                    <span id = "radial-tree" class = "button toolbar-compare active" title = "radial树">
+                        <i class="icon iconfont">&#xe60a;</i>
+                    </span>
+                    <span id = "sunburst-tree" class = "button toolbar-compare" title = "sunburst树">
+                         <i class="icon iconfont">&#xe61a;</i>
+                    </span>         
+                </div>
+                 <div id = "projection-method-div" class = "button-group bind">
+                    <span id = "tree-view" class = "button active projection-method toolbar-compare" title = "树状视图">
+                        <i class="icon iconfont">&#xe60e;</i>
+                    </span>
+                    <span id = "original-projection" class = "button projection-method toolbar-compare" title = "初始投影"><!--初始投影，没有连接-->
+                        <i class="icon iconfont">&#xe607;</i>
+                    </span>
+                     <span id = "center-projection" class = "button projection-method toolbar-compare" title = "初始投影-连接"><!--初始投影＋连接-->
+                        <i class="icon iconfont">&#xe606;</i>
+                    </span>
+                    <!--<span id = "center-size-glyph" class = "button projection-method toolbar-compare" title = "节点大小编码">
+                        <i class="icon iconfont">&#xe605;</i>
+                    </span>
+                    <span id = "center-subgraph-glyph" class = "button projection-method toolbar-compare" title = "子结构编码">
+                        <i class="icon iconfont">&#xe608;</i>
+                    </span>
+                    <span id = "center-sunburst-glyph" class = "button projection-method toolbar-compare" title = "sunburst视图编码">
+                        <i class="icon iconfont">&#xe619;</i>
+                    </span>-->
+                </div>
+            </div>
+            <div id = "leftTreeWrapper" class = 'structure remove-highlight'>
+                <div id="leftTopWrapper" class = 'structure'>
+                    <span id = "node-type" class="btn btn-default btn-xs label blue-label">1</span>
+                    <div id='leftTopLeftWrapper-radial'>
+                        <svg class="radial"></svg>
+                    </div>
+                    <div id='leftTopLeftWrapper-sunburst'>
+                        <svg class="sunburst"></svg>
+                    </div>
+                    <div id='leftTopRightWrapper'>
+                        <div id='histogram-label'>
+                            <span id = 'histogram-label-text'>流量分布图</span>
+                        </div>
+                        <div id='leftTopRightBottomWrapper'>
+                            <svg class='radial-histogram'></svg>
+                        </div>
+                    </div>
+                </div>
+                <div id="leftBottomWrapper" class = 'structure'>
+                    <svg class="parset"></svg>
+                </div>
+            </div>
+            <div id = 'projectionWrapper' class='structure'>
+                <svg class = "projection"></svg>
+            </div>
+            <div id = 'projectionLinkWrapper' class='structure'>
+                <svg class = "projection-link"></svg>
+            </div>
+        </div>
+        <div id="dialog-confirm" class="help_document" title="help document" >       
+            <img src="helpdocument/overview_introduction.png" class="help_img" width="800px" >
+        </div>
+    </body>
+    <!-- Libraries -->   
+    <script type="text/javascript" src="libs/MDS/numeric.js"></script>
+    <script type="text/javascript" src="libs/MDS/mds.js"></script>
+    <script type="text/javascript" src="libs/jquery.js"></script>
+    <script type="text/javascript" src="libs/d3.js"></script>
+    <script type="text/javascript" src="libs/d3.tip.js"></script>
+    <script type="text/javascript" src="libs/queue.js"></script>
+    <script type="text/javascript" src="libs/Underscore.js"></script>
+    <script type="text/javascript" src='libs/less.js'></script>
+    <script type="text/javascript" src="libs/d3.parsets/d3.parsets.js"></script>   
+    <script type="text/javascript" src="libs/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="libs/jquery-ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="libs/lasso.js"></script>
+    <!-- utils js -->
+    <script type="text/javascript" src="js/sigtree.js"> </script>
+    <script type="text/javascript" src="js/ObserverManager.js"> </script>
+    <script type="text/javascript" src="js/utils.js"> </script>
+    <script type="text/javascript" src="js/data_processor.js"> </script>
+    <script type="text/javascript" src="js/combinator.js"> </script>
+    <script type="text/javascript" src="js/projection.js"></script> 
+    <script type="text/javascript" src='js/projection_link.js'></script>
+    <script type="text/javascript" src='js/toolbar_signaltree.js'></script>
+    <script type="text/javascript" src='js/toolbar_comparison.js'></script>
+    <script type="text/javascript" src='js/toolbar_all.js'></script>
+    <script type="text/javascript" src='js/sunburst_view.js'></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/view_controller.js"></script>
+    <script type="text/javascript" src="js/tree_compare.js"></script>
+    <script type="text/javascript" src='js/multitree_comparison.js'></script>
+	  <script type="text/javascript" src="js/radial.js"></script> 
+    <script type="text/javascript" src='js/radial_histogram.js'></script>
+    <script type="text/javascript" src="js/datacenter.js"></script>
+    <script type="text/javascript" src="js/sunburst.js"></script>
+	  <script type="text/javascript" src="js/parset.js"></script>    
+	  <script type="text/javascript" src="js/tree_select.js"></script>
+    <script type="text/javascript" src="js/all_views_controller.js"></script>
+    
+</html>
+
+
+

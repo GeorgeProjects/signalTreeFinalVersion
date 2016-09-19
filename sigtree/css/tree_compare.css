@@ -1,0 +1,93 @@
+.node{
+	stroke: steelblue;
+	stroke-width: 2;
+}
+.routenode-inner{
+	fill: #4A4AFF;
+}
+.node-leaf{
+	fill: #EEEEEE;
+}
+.node-inner{
+	fill: steelblue;
+}
+.reverse-node-inner{
+	fill: #FF7F0E;
+}
+.node-bottominner{
+	fill: rgb(255, 127, 14);
+}
+.node[class~=highlight] {
+  fill: #b2df8a;
+  stroke: #b2df8a;
+}
+.buttom-div{
+	position: absolute;
+	right: 0;
+	height: 100;
+	width: 40;
+	visibility: visible;
+}
+.link{
+	stroke-width:1px;
+	stroke: #888888;
+	fill:none;
+	opacity:0.8;
+}
+.route-link{
+	stroke-width:1px;
+	stroke: #4A4AFF;
+	fill:none;
+	opacity: 1;	
+}
+.dash_line{
+	stroke-width:1px;
+	fill:none;
+	opacity: 0.5;
+	stroke:#000000;
+}
+.trend{
+	fill: none;
+	stroke-width:1px;
+	stroke: gray;
+	opacity: 0.5;
+}
+.top_bar{
+	opacity:0.8;
+  fill:#1F77B4;
+	/*fill: green;*/
+}
+.bottom_bar{
+	opacity:0.8;
+  fill:#FF7F0E;
+	/*fill: blue;	*/
+}
+
+.AB{
+  font-size: 25px;
+}
+.single-tree{
+  //border-color: gray;
+  border-color: black;
+  border-width: 1px 1px 0px 0px;
+  border-style: solid;
+}
+.span-label{
+	visibility: visible;
+	box-sizing: border-box;
+	cursor: pointer;
+	display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: bold;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+    color: white;
+    background-color: #1F77B4;
+}
+.flow_similar_rect{
+	fill: #4F4F4F !important;
+}
