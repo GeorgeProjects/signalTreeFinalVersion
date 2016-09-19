@@ -231,7 +231,6 @@ var multiTreeComparison = {
 				var rollingOver = objectArray[i].is_rolling_over;
 				//_add_tree_label(treeId, rollingOver, treeNumber);
 				//_divide_container(treeId, rollingOver, height);
-				//console.log($('#' + treeId));
 				if($('#' + treeId)[0]){
 					//如果之前选择了该信号树，只需要改变这个信号树的高度，并不需要新增加div
 					_change_container(treeId, treeName, rollingOver, height);
@@ -649,6 +648,7 @@ var multiTreeComparison = {
 		}
 		var brush = d3.svg.brush()
 		    .x(xScale)
+		    //.on("click", brush_click_handler)
 		    .on("brushstart", brushstart)
 		    .on("brush", brushmove)
 		    .on("brushend", function(d,i){
@@ -751,13 +751,16 @@ var multiTreeComparison = {
 				var extentRangeLength = extent[1] - extent[0];
 				if(extentRangeLength > 0.01){
 					self.focusRange = extent;
+					$('#resize-brush').removeClass('active')
 				}
 			}else{
-				console.log('extent[0]', extent[0]);
-				extent[0] = _cx_back_handler(extent[0]);
-				console.log('extent[0]', extent[0]);
-				extent[1] = _cx_back_handler(extent[1]);
-				self.focusRange = extent;
+				var extentRangeLength = extent[1] - extent[0];
+				if(extentRangeLength > 0.01){
+					extent[0] = _cx_back_handler(extent[0]);
+					extent[1] = _cx_back_handler(extent[1]);
+					self.focusRange = extent;
+					$('#resize-brush').removeClass('active')
+				}
 			}
 			$('#multitree .extent').attr('width', 0);
 			self._compute_all_nodes_and_render();
@@ -776,7 +779,6 @@ var multiTreeComparison = {
 			var focusScaleStart = self.focusScaleStart;
 			var focusScaleEnd = self.focusScaleEnd;
 			var focusRange = self.focusRange;
-			console.log('cx', cx);
 			var leftBackScale = d3.scale.linear().domain([0, focusScaleStart]).range([0, focusRange[0]]);
 			var centerBackScale = d3.scale.linear().domain([focusScaleStart, focusScaleEnd]).range([focusRange[0], focusRange[1]]);
 			var rightBackScale = d3.scale.linear().domain([focusScaleEnd, 1]).range([focusRange[1], 1]);
@@ -1018,7 +1020,9 @@ var multiTreeComparison = {
 			};
 			ObserverManager.post("mouse-over", [d.id]);
 			dataCenter.set_global_variable('mouse_over_signal_node', clickNode);
-			tip.show(d);
+			if(dataCenter.global_variable.enable_tooltip){
+				tip.show(d);
+			}
 		})
 		.on('mouseout', function(d,i){
 			ObserverManager.post("mouse-out", [d.id]);
@@ -1219,13 +1223,11 @@ var multiTreeComparison = {
 		}
 		function _filter_by_depth(total_nodes){
 			var currentDepth = dataCenter.global_variable.comparison_view_current_depth;
-			console.log(total_nodes.length);
 			var totalNodes = total_nodes.filter(function(d){
 				if(d.depth <= currentDepth){
 					return d;
 				}
 			});
-			console.log(totalNodes.length);
 			return totalNodes;
 		}
 		function _compute_node_range_array(nodes_to_draw){
@@ -1311,7 +1313,6 @@ var multiTreeComparison = {
 		function _filter_brush_exist_node(nodes_to_draw, focus_range){
 			var self = this;
 			var focusRange = focus_range;
-			console.log('nodes_to_draw.length', nodes_to_draw.length);
 			for(var i = 0;i < nodes_to_draw.length;i++){
 				var nodeRangeArray = nodes_to_draw[i].range_array;
 				if(nodeRangeArray != undefined){
@@ -1490,6 +1491,9 @@ var multiTreeComparison = {
 							if (thisNodeSibling[i].values) {
 								thisNodeSibling[i]._values = thisNodeSibling[i].values;
 								thisNodeSibling[i].values = null;
+							}else{
+								thisNodeSibling[i].values = thisNodeSibling[i]._values;
+								thisNodeSibling[i]._values = null;
 							}
 						}
 					}
@@ -1902,7 +1906,9 @@ var multiTreeComparison = {
 			};
 			ObserverManager.post("mouse-over", [d.id]);
 			dataCenter.set_global_variable('mouse_over_signal_node', clickNode);
-			tip.show(d);
+			if(dataCenter.global_variable.enable_tooltip){
+				tip.show(d);
+			}
 		})
 		.on('mouseout', function(d,i){
 			ObserverManager.post("mouse-out", [d.id]);
@@ -2033,13 +2039,11 @@ var multiTreeComparison = {
 		}
 		function _filter_by_depth(total_nodes){
 			var currentDepth = dataCenter.global_variable.comparison_view_current_depth;
-			console.log(total_nodes.length);
 			var totalNodes = total_nodes.filter(function(d){
 				if(d.depth <= currentDepth){
 					return d;
 				}
 			});
-			console.log(totalNodes.length);
 			return totalNodes;
 		}
 		function _filter_according_to_same(nodes_to_draw){
@@ -2148,7 +2152,6 @@ var multiTreeComparison = {
 		function _filter_brush_exist_node(nodes_to_draw, focus_range){
 			var self = this;
 			var focusRange = focus_range;
-			console.log('nodes_to_draw.length', nodes_to_draw.length);
 			for(var i = 0;i < nodes_to_draw.length;i++){
 				var nodeRangeArray = nodes_to_draw[i].range_array;
 				if(nodeRangeArray != undefined){
@@ -2302,6 +2305,9 @@ var multiTreeComparison = {
 							if (thisNodeSibling[i].values) {
 								thisNodeSibling[i]._values = thisNodeSibling[i].values;
 								thisNodeSibling[i].values = null;
+							}else{
+								thisNodeSibling[i].values = thisNodeSibling[i]._values;
+								thisNodeSibling[i]._values = null;
 							}
 						}
 					}
@@ -2511,7 +2517,11 @@ var multiTreeComparison = {
 			self._remove_current_hover();
 		}
 		if(message == 'draw-current-operation'){
-			self._draw_current_operation();
+			if(dataCenter.global_variable.comparison_show_similiar){
+				self._compute_all_nodes_and_render();
+			}else{
+				self._draw_current_operation();
+			}
 		}
 		if(message == 'resize-brush'){
 			self.focusRange = [0, 1];

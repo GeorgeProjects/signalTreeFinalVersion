@@ -12,6 +12,16 @@ var toolbarAll = {
 		ObserverManager.addListener(this);
 	},
 	_bind_view: function(){
+		$('#system-title-div #title').on('click', function(){
+			$("#dialog-system-introduction").dialog("open");
+		});
+		$("#dialog-system-introduction").dialog
+		({
+			width:"500",
+			height:"350",
+	        //modal: true,             // 创建模式对话框
+	        autoOpen: false,         // 只初始化，不显示
+	    });
 		$('#arc-link').on('click', function(d,i){
 			if(!($('#arc-link').hasClass('active'))){
 				$('#arc-link').addClass('active');
@@ -23,7 +33,6 @@ var toolbarAll = {
 		});
 		$('#arc-link-hover').on('click', function(d,i){
 			var hoverArcLinkNum = +dataCenter.global_variable.hover_arc_link_num;
-			console.log(hoverArcLinkNum);
 			$("#slider").slider();
 			$( "#slider" ).slider({
 			      orientation: "horizontal",
@@ -126,7 +135,6 @@ var toolbarAll = {
 		});	
 		var pageNum = 1;
 		$('#help').click(function(){
-			console.log("!!!")
 			pageNum = 1;
 			$("#dialog-confirm").dialog("open");
 		});
@@ -141,16 +149,30 @@ var toolbarAll = {
 		        	if(pageNum == 1){
 		        		d3.selectAll(".help_img").remove()
 			        	$( ".help_document" ).append( 
-			        		"<img src=\"helpdocument/overview_introduction.png\" class=\"help_img\" width=\"600px\" >"
+			        		"<img src=\"helpdocument/help1.png\" class=\"help_img\" width=\"800px\" >"
 			        	);
 			        	pageNum = 1;
 			        	console.log('pageNum', pageNum);
 		        	}else if(pageNum == 2){
 		        		d3.selectAll(".help_img").remove()
 			        	$( ".help_document" ).append( 
-			        		"<img src=\"helpdocument/overview_introduction.png\" class=\"help_img\" width=\"600px\" >"
+			        		"<img src=\"helpdocument/help1.png\" class=\"help_img\" width=\"800px\" >"
 			        	);
 		        		pageNum = 1;
+		        		console.log('pageNum', pageNum);
+		        	}else if(pageNum == 3){
+		        		d3.selectAll(".help_img").remove()
+			        	$( ".help_document" ).append( 
+			        		"<img src=\"helpdocument/help2.png\" class=\"help_img\" width=\"850px\" >"
+			        	);
+		        		pageNum = 2;
+		        		console.log('pageNum', pageNum);
+		        	}else if(pageNum == 4){
+		        		d3.selectAll(".help_img").remove()
+			        	$( ".help_document" ).append( 
+			        		"<img src=\"helpdocument/help3.png\" class=\"help_img\" width=\"800px\" >"
+			        	);
+		        		pageNum = 3;
 		        		console.log('pageNum', pageNum);
 		        	}
 		        },
@@ -158,16 +180,30 @@ var toolbarAll = {
 		        	if(pageNum == 1){
 		        		d3.selectAll(".help_img").remove()
 			        	$( ".help_document" ).append( 
-			        		"<img src=\"helpdocument/single_tree_introduction.png\" class=\"help_img\" width=\"600px\" >"
+			        		"<img src=\"helpdocument/help2.png\" class=\"help_img\" width=\"800px\" >"
 			        	);
 			        	pageNum = 2;
 			        	console.log('pageNum', pageNum);
 		        	}else if(pageNum == 2){
 		        		d3.selectAll(".help_img").remove()
 			        	$( ".help_document" ).append( 
-			        		"<img src=\"helpdocument/single_tree_introduction.png\" class=\"help_img\" width=\"600px\" >"
+			        		"<img src=\"helpdocument/help3.png\" class=\"help_img\" width=\"850px\" >"
 			        	);
-		        		pageNum = 2;
+		        		pageNum = 3;
+		        		console.log('pageNum', pageNum);
+		        	}else if(pageNum == 3){
+		        		d3.selectAll(".help_img").remove()
+			        	$( ".help_document" ).append( 
+			        		"<img src=\"helpdocument/help4.png\" class=\"help_img\" width=\"800px\" >"
+			        	);
+		        		pageNum = 4;
+		        		console.log('pageNum', pageNum);
+		        	}else if(pageNum == 4){
+		        		d3.selectAll(".help_img").remove()
+			        	$( ".help_document" ).append( 
+			        		"<img src=\"helpdocument/help4.png\" class=\"help_img\" width=\"800px\" >"
+			        	);
+		        		pageNum = 4;
 		        		console.log('pageNum', pageNum);
 		        	}
 		        }

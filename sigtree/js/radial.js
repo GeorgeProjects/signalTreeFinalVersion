@@ -111,7 +111,6 @@ var radial = {
 			  .attr('class', 'd3-radial-tip')
 			  .offset([-10, 0])
 			  .html(function(d) {
-			  	console.log(d);
 			    return "Name: <span style='color:#ff5858'>" +  d.key + "</span>"  + " flow:<span style='color:#ff5858'>" +  d3.format(".3s")(d.flow) + "</span>";//d.time +
 			  });
 			var nodes = tree_node_list,
@@ -178,7 +177,6 @@ var radial = {
 					return "radial-node-" + id;
 				})
 				.on("click",function(d,i){
-					console.log(d);
 					_unhighlight();
 					var this_node = d3.select(this);
 					_click(d, i, this_node, tree_root);
@@ -280,6 +278,9 @@ var radial = {
 							if (thisNodeSibling[i].values) {
 								thisNodeSibling[i]._values = thisNodeSibling[i].values;
 								thisNodeSibling[i].values = null;
+							}else{
+								thisNodeSibling[i].values = thisNodeSibling[i]._values;
+								thisNodeSibling[i]._values = null;
 							}
 						}
 					}

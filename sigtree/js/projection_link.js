@@ -86,12 +86,12 @@ var projectionLink = {
 		})
 	    .on('mouseover', function(d,i){
 			//send message, highlight the corresponding histogram
-			console.log(d[2]);
 			ObserverManager.post('mouseover-signal-tree', d[2]);
-			tip.show(d);
+			if(dataCenter.global_variable.enable_tooltip){
+				tip.show(d);
+			}
 		})
 		.on('mouseout', function(d,i){
-			console.log(d[2]);
 			ObserverManager.post('mouseout-signal-tree', d[2]);
 			tip.hide(d);
 		})
@@ -115,17 +115,29 @@ var projectionLink = {
 	    .on('mouseover', function(d,i){
 			//send message, highlight the corresponding histogram
 			ObserverManager.post('mouseover-signal-tree', d[2]);
-			tip.show(d);
+			if(dataCenter.global_variable.enable_tooltip){
+				tip.show(d);
+			}
 		})
 		.on('mouseout', function(d,i){
-			console.log(d[2]);
 			ObserverManager.post('mouseout-signal-tree', d[2]);
 			tip.hide(d);
 		})
 		.on('click', function(d,i){
 			ObserverManager.post('click-signal-tree', d[2]);
 		});
-
+		svg.append('text')
+		.attr('class', 'label-start-end-projection-link')
+		.attr('id', 'text-' + nodeLocation[0][2])
+		.attr('x', nodeLocation[0][0])
+		.attr('y', nodeLocation[0][1])
+		.text('start');
+		svg.append('text')
+		.attr('class', 'label-start-end-projection-link')
+		.attr('id', 'text-' + nodeLocation[(nodeNum - 1)][2])
+		.attr('x', nodeLocation[(nodeNum - 1)][0])
+		.attr('y', nodeLocation[(nodeNum - 1)][1])
+		.text('end');
 		sigTreeNode.exit().remove();
 		self._draw_current_selection();
 		self._draw_current_operation();
@@ -196,17 +208,23 @@ var projectionLink = {
 	 	var selectionObjectArray = dataCenter.global_variable.selection_object_array;
 	 	for(var i = 0;i < selectionObjectArray.length;i++){
 	 		var thisNode = svg.select('#' + nodeIdPrefix + selectionObjectArray[i].tree_name);
-	 		self._re_draw_node(thisNode);
+	 		if(thisNode[0][0] != null){
+	 			self._re_draw_node(thisNode);
+	 		}
 	 	}
 	 	svg.selectAll('.selection-highlight-positive')
 	 	.each(function(d,i){
 	 		var thisNode = d3.select(this);
-	 		self._re_draw_node(thisNode);
+	 		if(thisNode[0][0] != null){
+	 			self._re_draw_node(thisNode);
+	 		}
 	 	});
 	 	svg.selectAll('.selection-highlight-negative')
 	 	.each(function(d,i){
 	 		var thisNode = d3.select(this);
-	 		self._re_draw_node(thisNode);
+	 		if(thisNode[0][0] != null){
+	 			self._re_draw_node(thisNode);
+	 		}
 	 	});
 	 },
 	_re_draw_node: function(this_node){
@@ -234,13 +252,11 @@ var projectionLink = {
 			.on('mouseout', function(d,i){
 				var thisId = d3.select(this).attr('id');
 				var thisName = thisId.replace(nodeIdPrefix,'');
-				console.log(thisName);
 				ObserverManager.post('mouseout-signal-tree', thisName);
 			})
 			.on('click', function(d,i){
 				var thisId = d3.select(this).attr('id');
 				var thisName = thisId.replace(nodeIdPrefix,'');
-				console.log(thisName);
 				ObserverManager.post('click-signal-tree', thisName);
 			});
 		this_node.remove();

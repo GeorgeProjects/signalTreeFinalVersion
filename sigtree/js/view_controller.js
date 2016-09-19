@@ -30,7 +30,6 @@ var viewsController = {
         var propotionArray = [];
         var statData = dataCenter.stats;
         var allInfoObj = dataCenter.global_variable.all_info_obj;
-        console.log('allInfoObj', allInfoObj);
         for(var i = 0;i < allInfoObj.length;i++){
             timeSortArray[i] = new Object();        
             timeSortArray[i].value = +allInfoObj[i].flow;
@@ -256,7 +255,6 @@ var viewsController = {
             });
         });
         function merge_trees(root1, root2, index){
-            //console.log('index', index);
             if(root1._children){root1.children = root1._children;}
             if(root2._children){root2.children = root2._children;}
             var idlist = {};
@@ -378,7 +376,6 @@ var viewsController = {
                 var range = d3.extent(selectionObjectArray, function(d,i){
                     return d.tree_number;
                 });
-                console.log('range', range);
                 var currentTreeNumArray = [];
                 for(var i = 0;i < selectionObjectArray.length;i++){
                     currentTreeNumArray.push(selectionObjectArray[i].tree_number);
@@ -463,7 +460,6 @@ var viewsController = {
             $.when(defer)
                 .done(function(){
                     //拷贝信号树数据，并且深拷贝另一份数据文件添加到clone_datasets数组中
-                    console.log('read data finish');
                     dataCenter.datasets.push(dataset);
                     self._add_selection_object(dataset.id, 
                                 dataset.processor.result.treeRoot,
@@ -486,7 +482,6 @@ var viewsController = {
         }
         for(var i = 0;i < selectionObjectArray.length;i++){
             if(data == selectionObjectArray[i].tree_name){
-                console.log(selectionObjectArray[i]);
                 dataCenter.global_variable.delete_tree_index = selectionObjectArray[i].tree_index;
                 selectionObjectArray.splice(i, 1);
                 break;
@@ -541,7 +536,6 @@ var viewsController = {
         for(var i = 0;i < selectionObjectArray.length;i++){
             if(selectionObjectArray[i].tree_name == tree_id){
                // var treeRoot =  selectionObjectArray[i].tree_root;
-                console.log(selectionObjectArray[i]);
                 dataCenter.global_variable.delete_tree_root = selectionObjectArray[i].tree_root;
                 selectionObjectArray.splice(i, 1);
                 break;
@@ -631,7 +625,6 @@ var viewsController = {
         //click信号树的信号
         if(message == 'click-signal-tree'){
             var sigtreeName = data;
-            console.log('data', data);
             var currentOperationTreeName = dataCenter.global_variable.current_operation_tree_name;
             if(sigtreeName == currentOperationTreeName){
                 //当前操作状态的节点再次被点击，会取消选择该节点

@@ -1,17 +1,17 @@
 .projection-nodes{
-	r: 4px;
+	r: 6px;
 	fill: gray;
   opacity: 1;
 }
 .projection-link-nodes{
-  r: 4px;
+  r: 6px;
   fill: gray;
   opacity: 1;
 }
 .projection-node-path {
   fill: none;
   stroke: gray;
-  stroke-width: 2px;
+  stroke-width: 3px;
 }
 .projection-node-point {
   fill: steelblue;

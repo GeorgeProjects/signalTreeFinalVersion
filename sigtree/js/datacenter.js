@@ -89,7 +89,6 @@ var dataCenter = {
 		'all_selection_object_array':[],
 		'selection_object_array':[],
 		'file_array_path': [],
-		'local_file': 'sample1',
 		'hover_tree_name': null,
 		'current_operation_tree_name':null,
 		'similarity_object_matrix':[],
@@ -134,7 +133,7 @@ var dataCenter = {
 		'multi_tree_smaller':null
 	},
 	GLOBAL_STATIC: {
-		'radius': 3.5,
+		'radius': 4,
 		'DEFAULT_ARC_LINK_NUM': 2,
 		'MAX_DEPTH': 4,
 		'MAX_LEVEL': 10,

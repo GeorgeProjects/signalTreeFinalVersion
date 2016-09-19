@@ -11,18 +11,10 @@
   fill: #b2df8a;
   stroke: #b2df8a;
 }
-.radial-route-node-inner{
-  fill: #4A4AFF;
-}
 .link {
   fill: none;
   stroke: #ccc;
   stroke-width: 1px;
-}
-.radial-route-link{
-  stroke-width:1px;
-  stroke: #4A4AFF;
-  fill:none;
 }
 .axis line,
 .axis path {

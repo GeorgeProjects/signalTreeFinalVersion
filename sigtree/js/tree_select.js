@@ -175,11 +175,15 @@ var treeSelect = {
 			})			
 			.on('mouseover', function(d,i){
 				ObserverManager.post('mouseover-signal-tree', d.time);
-				tip.show(d);
+				if(dataCenter.global_variable.enable_tooltip){
+					tip.show(d);
+				}
 			})
 			.on('mouseout', function(d,i){
 				//在鼠标从节点上面离开的时候不发送信号，这也就保证了overview上面的闪动的问题
-				tip.hide(d);
+				if(dataCenter.global_variable.enable_tooltip){
+					tip.hide(d);
+				}
 			})
 			.on('click', function(d,i){
 				ObserverManager.post('click-signal-tree', d.time);
@@ -522,12 +526,10 @@ var treeSelect = {
 		}
 	},
 	hide_default_arc_link: function(){
-		console.log('hidden');
 		var svg = d3.select('#mainTimeline');
 		svg.selectAll('.default-arc-link').attr('visibility', 'hidden');
 	},
 	show_default_arc_link: function(){
-		console.log('show');
 		var svg = d3.select('#mainTimeline');
 		svg.selectAll('.default-arc-link').attr('visibility', 'visible');
 	},

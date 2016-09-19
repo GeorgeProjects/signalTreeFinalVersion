@@ -66,15 +66,17 @@
           // Populate tree with existing nodes.
           g.select(".ribbon").selectAll("path")
               .each(function(d) {
-                var path = d.path.split("\0"),
-                    node = tree,
-                    n = path.length - 1;
-                for (var i = 0; i < n; i++) {
-                  var p = path[i];
-                  node = node.children.hasOwnProperty(p) ? node.children[p]
-                      : node.children[p] = {children: {}, count: 0};
+                if(d.path != undefined){
+                  var path = d.path.split("\0"),
+                      node = tree,
+                      n = path.length - 1;
+                  for (var i = 0; i < n; i++) {
+                    var p = path[i];
+                    node = node.children.hasOwnProperty(p) ? node.children[p]
+                        : node.children[p] = {children: {}, count: 0};
+                  }
+                  node.children[d.name] = d;
                 }
-                node.children[d.name] = d;
               });
           tree = buildTree(tree, data, dimensions.map(dimensionName), value_);
           cache = dimensions.map(function(d) {
@@ -298,7 +300,9 @@
         // Unhighlight all nodes.
         function unhighlight() {
           if (dragging) return;
-          ribbon.classed("active", false);
+          if(ribbon != undefined){
+            ribbon.classed("active", false);
+          }
           hideTooltip();
         }
 

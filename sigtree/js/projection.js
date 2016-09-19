@@ -26,9 +26,9 @@ var projection = {
 		  .attr('class', 'd3-tip')
 		  .offset([-10, 0])
 		  .html(function(d) {
-		  	console.log(d);
 		    return "Date: <span style='color:#ff5858'>" + d[2] + "</span>";
 		  });
+		d3.select('svg.projection').selectAll('*').remove();
 		var svg = d3.select('svg.projection')
 			.attr('width', svgWidth)
 			.attr('height', svgWidth)
@@ -36,7 +36,6 @@ var projection = {
 			.attr('id', 'projection')
 			.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 		svg.call(tip);
-		svg.selectAll('*').remove();
 		svg.append('rect')
 			.attr('id', 'projection-background')
 			.attr('width', width)
@@ -66,7 +65,9 @@ var projection = {
 			return selectionArray.indexOf(b[2]) - selectionArray.indexOf(a[2]);
 		});
 		var sigTreeNode = svg.selectAll(".projection-nodes")
-	    .data(nodeLocation)
+	    .data(nodeLocation, function(d){
+	    	return d[2];
+	    });
 
 	  	sigTreeNode.enter()
 	  	.append("circle")
@@ -93,7 +94,14 @@ var projection = {
 		.on('click', function(d,i){
 			ObserverManager.post('click-signal-tree', d[2]);
 		});
-
+		sigTreeNode.transition()
+			.duration(700)
+			.attr('cx', function(d,i){
+				return d[0];
+			})
+			.attr('cy', function(d,i){
+				return d[1];
+			});
 		sigTreeNode.attr('class', function(d,i){
 	  		var classNameArray = ['projection-nodes']
 			return self._group_class(classNameArray);
@@ -101,16 +109,12 @@ var projection = {
 		.attr('id', function(d,i){
 			return nodeIdPrefix + d[2];
 		})
-		.attr('cx', function(d,i){
-			return d[0];
-		})
-		.attr('cy', function(d,i){
-			return d[1];
-		})
 	    .on('mouseover', function(d,i){
 			//send message, highlight the corresponding histogram
 			ObserverManager.post('mouseover-signal-tree', d[2]);
-			tip.show(d);
+			if(dataCenter.global_variable.enable_tooltip){
+				tip.show(d);
+			}
 		})
 		.on('mouseout', function(d,i){
 			ObserverManager.post('mouseout-signal-tree', d[2]);
@@ -119,6 +123,7 @@ var projection = {
 		.on('click', function(d,i){
 			ObserverManager.post('click-signal-tree', d[2]);
 		});
+
 		sigTreeNode.exit().remove();
 		self._draw_current_selection();
 		self._draw_current_operation();
@@ -154,9 +159,83 @@ var projection = {
 		svg.selectAll('.projection-nodes').classed('mouseover-highlight', false);
 		//在将节点移动到另外一个节点之前需要将选择的信号树重新绘制一遍，从而保证当前选择的信号树不会被覆盖
 		self._draw_current_selection();
+		self._add_arc_to_one(signalTreeTime);
 		if(signalTreeTime != null){
 			svg.select('#' + nodeIdPrefix + signalTreeTime).classed('mouseover-highlight', true);
 			//self._re_draw_node(svg.select('#' + nodeIdPrefix + signalTreeTime));
+		}
+	},
+	_add_arc_to_one:function(signal_tree_name){
+	 	var self = this;
+	 	var operationSimilarArray = dataCenter.global_variable.operation_similar_array;
+	 	var index = operationSimilarArray.indexOf(signal_tree_name);
+	 	if((signal_tree_name == undefined) || (operationSimilarArray.indexOf(signal_tree_name) != -1)){
+	 		signal_tree_name = dataCenter.global_variable.current_operation_tree_name;
+	 	}
+	 	if((signal_tree_name != undefined)&&(signal_tree_name != null)){
+	 		var nodeIdPrefix = self.nodeIdPrefix;
+	 		var svg = d3.select('#projection');
+		 	var arcClass = 'hover-arc-link';
+		 	var similarityObjectMatrix = dataCenter.global_variable.similarity_object_matrix;
+		 	//绘制每一个信号树的连接之前，将默认的信号树连接透明度降低
+		 	svg.selectAll('.projection-nodes').classed('thinner-draw-hover-link', true);
+		 	svg.selectAll('.projection-nodes').classed('mouseover-other-nodes-unhighlight', false);
+		 	svg.selectAll('.projection-nodes').style('fill', '#C0C0C0');		 	
+		 	svg.selectAll('.arc-num-label').remove();
+			var opacityScale = d3.scale.linear()
+				.domain([0, dataCenter.global_variable.hover_arc_link_num])
+				.range([0,1]);
+			var dark = d3.rgb(200,200,200);
+			var bright = d3.rgb(50,50,50);
+			var compute = d3.interpolate(bright,dark); 
+		 	//首先将相似度矩阵转换为对象的数组
+		 	for(var i = 0;i < similarityObjectMatrix.length;i++){
+		 		var originName = similarityObjectMatrix[i][0].origin_name;
+		 		if(originName == signal_tree_name){
+		 			for(var j = 0;j < dataCenter.global_variable.hover_arc_link_num;j++){//
+		 				var fillColorRectAndArc = compute(opacityScale(j));
+		 				var targetName = similarityObjectMatrix[i][j].target_name;
+		 				console.log('targetName', targetName);
+		 				svg.select('#' + nodeIdPrefix + targetName)
+		 					.classed('thinner-draw-hover-link', false);
+		 				svg.select('#' + nodeIdPrefix + targetName)
+		 					.classed('mouseover-other-nodes-unhighlight', false);
+		 				svg.select('#' + nodeIdPrefix + targetName)
+		 					.style('fill', fillColorRectAndArc);
+		 				self._re_draw_node(svg.select('#' + nodeIdPrefix + targetName));
+				 		self._add_arc_num_text(targetName, j);
+		 			}
+		 		}	
+		 	}
+	 	}
+	 },
+	  _add_arc_num_text: function(arc_link_tree_id, number){
+		//防止选中的rect的text与顺序的text冲突
+		var self = this;
+		var nodeIdPrefix = self.nodeIdPrefix;
+		var svg = d3.select('#projection');
+		var haveAddedNow = false;
+		var selectionObjectArray = dataCenter.global_variable.selection_object_array;
+		for(var i = 0;i < selectionObjectArray.length;i++){
+			if(selectionObjectArray[i].tree_name == arc_link_tree_id){
+				haveAddedNow = true;
+				break;
+			}
+		}
+		if(!haveAddedNow){
+			var selectionArray = dataCenter.global_variable.selection_array;
+			var thisNode = d3.select('#' + nodeIdPrefix + arc_link_tree_id);
+			var thisX = +thisNode.attr('cx');
+			var thisY = +thisNode.attr('cy');
+			var thisWidth = +thisNode.attr('width');
+			var centerX = thisX + thisWidth / 2; 
+			var centerY = thisY - 2;
+			svg.append('text')
+				.attr('class', 'arc-num-label')
+				.attr('x', centerX)
+				.attr('y', centerY)
+				.attr('text-anchor', 'middle')
+				.text(number + 1);
 		}
 	},
 	_remove_current_hover: function(){
@@ -165,6 +244,9 @@ var projection = {
 		svg.selectAll('.projection-nodes')
 			.classed('thinner-draw-hover-link', false);
 		self._draw_current_selection();
+		if(dataCenter.global_variable.hover_arc_link_num > 0){
+	 		self._add_arc_to_one();
+	 	}
 	},
 	_draw_current_operation: function(){
 		var self = this;
@@ -199,7 +281,6 @@ var projection = {
 	 	});
 	 },
 	_re_draw_node: function(this_node){
-		console.log('re-draw-nodes');
 		var self = this;
 		var nodeIdPrefix = self.nodeIdPrefix;
 		var svg = d3.select('#projection');
@@ -207,6 +288,7 @@ var projection = {
 		var thisId = this_node.attr('id');
 		var thisCx = +this_node.attr('cx');
 		var thisCy = +this_node.attr('cy');
+		var thisFill = this_node.style('fill');
 		svg.append('circle')
 			.attr('class', function(d,i){
 				return thisClass;
@@ -217,23 +299,21 @@ var projection = {
 			.attr('cx', thisCx)
 			.attr('cy', thisCy)
 			.on('mouseover', function(d,i){
-				console.log('mouseover signal-tree');
 				var thisId = d3.select(this).attr('id');
 				var thisName = thisId.replace(nodeIdPrefix,'');
 				ObserverManager.post('mouseover-signal-tree', thisName);
 			})
 			.on('mouseout', function(d,i){
-				console.log('mouseover signal-tree');
 				var thisId = d3.select(this).attr('id');
 				var thisName = thisId.replace(nodeIdPrefix,'');
 				ObserverManager.post('mouseout-signal-tree', thisName);
 			})
 			.on('click', function(d,i){
-				console.log('click signal-tree');
 				var thisId = d3.select(this).attr('id');
 				var thisName = thisId.replace(nodeIdPrefix,'');
 				ObserverManager.post('click-signal-tree', thisName);
-			});
+			})
+			.style('fill',thisFill);
 		this_node.remove();
 	},
 	OMListen: function(message, data){
@@ -246,6 +326,8 @@ var projection = {
 			self._draw_current_hover();
 		}else if(message == 'remove-current-hover'){
 			self._remove_current_hover();
+		}else if(message == 'set:hover_arc_link_num'){
+			self._add_arc_to_one();
 		}
 	}
 }

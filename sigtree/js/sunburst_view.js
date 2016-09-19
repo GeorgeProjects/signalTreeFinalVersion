@@ -68,7 +68,6 @@ var sunburstView = {
 		  .attr('class', 'd3-radial-tip')
 		  .offset([-10, 0])
 		  .html(function(d) {
-		  	console.log(d);
 		    return "Name: <span style='color:#ff5858'>" + d.key + "</span>"  + " flow:<span style='color:#ff5858'>" + d3.format(".3s")(d.value)+ "</span>";
 		  });
 		svg.call(tip);
@@ -82,7 +81,6 @@ var sunburstView = {
 		    })
 		    .endAngle(function(d) { return d.x + d.dx; })
 		    .innerRadius(function(d) { 
-		    	//console.log('d', d);
 		    	return Math.sqrt(d.y); 
 		    })
 		    .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
@@ -128,7 +126,9 @@ var sunburstView = {
 	      			dataCenter.global_variable.current_mouseover_signaltree = dataCenter.global_variable.current_operation_tree_name;
 	      			ObserverManager.post("mouse-over", [d.id]);
 	      			ObserverManager.post('mouseover-signal-tree', dataCenter.global_variable.current_operation_tree_name);
-	      			tip.show(d);
+	      			if(dataCenter.global_variable.enable_tooltip){
+	      				tip.show(d);
+	      			}
 	      		})
 	      		.on('mouseout', function(d,i){
 	      			dataCenter.set_global_variable('mouse_over_signal_node', null);
@@ -143,7 +143,6 @@ var sunburstView = {
 
 	      		path.attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
 	      		.attr('class', function(d,i){
-	      			console.log('isRollingOver', isRollingOver);
 	    			var classNameArray = ['sunburst-node'];
 	    			if(!isRollingOver){
 	    				if((d.children == null) && (d._children != null)){
@@ -198,6 +197,9 @@ var sunburstView = {
 							if (thisNodeSibling[i].children) {
 								thisNodeSibling[i]._children = thisNodeSibling[i].children;
 								thisNodeSibling[i].children = null;
+							}else{
+								thisNodeSibling[i].children = thisNodeSibling[i]._children;
+								thisNodeSibling[i]._children = null;
 							}
 						}
 					}

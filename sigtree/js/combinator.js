@@ -91,7 +91,6 @@ function sigtree_combinatorCombineByIndex(lst1, lst2){
 
 sigtree.merge_tree = function(combinator){
 	function merge(node){
-		// console.log("merge", console.trace());
 		function hasChild(obj){
 			return obj && Array.isArray(obj.values) && obj.values.length;
 		}
